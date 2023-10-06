@@ -1,13 +1,19 @@
 package com.prueba.moviecrud.genre;
 
+import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.prueba.moviecrud.movie.Movie;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 
 @Entity
-class Genre {
+public class Genre {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -16,6 +22,10 @@ class Genre {
 
     @Column(name = "GENRE_NAME", length = 25, nullable = false)
     private String genreName; 
+
+    @ManyToMany(mappedBy = "genres")
+    @JsonIgnore
+    Set<Movie> movies;
 
 
     public Genre() {
@@ -36,5 +46,14 @@ class Genre {
     public void setGenreName(String genreName) {
         this.genreName = genreName;
     }
+
+    public Set<Movie> getMovies() {
+        return this.movies;
+    }
+
+    public void setMovies(Set<Movie> movies) {
+        this.movies = movies;
+    }
+
     
 }
