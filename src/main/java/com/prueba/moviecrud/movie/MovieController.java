@@ -36,6 +36,15 @@ public class MovieController {
         this.movieService = movieService;
     }
 
+    @Operation(
+      summary = "Retrieve all Movies",
+      description = """
+          Get a all Movies objects. 
+          The response is a list of Movie objects with id, title, description, release year, director object and a list of genre objects.
+              """)
+    @ApiResponses({
+      @ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = DirectorDTO.class), mediaType = "application/json") })
+    })
     @GetMapping
     public ResponseEntity<List<MovieDTO>> getAllMovies() {
         return new ResponseEntity<>(movieService.getAllMovies(), HttpStatus.OK);
