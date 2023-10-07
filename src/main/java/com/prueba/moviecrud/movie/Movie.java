@@ -20,7 +20,7 @@ import jakarta.persistence.ManyToOne;
 public class Movie {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="ID_MOVIE")
     private Long id;
 
