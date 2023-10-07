@@ -14,8 +14,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
 
+@Tag(name = "Genre", description = "Genre management APIs")
 @RestController
 @RequestMapping("api/genre")
 public class GenreController {
@@ -31,6 +38,16 @@ public class GenreController {
         return new ResponseEntity<>(genreService.getAllGenres(), HttpStatus.OK);
     }
 
+    @Operation(
+      summary = "Retrieve a Genre by Id",
+      description = """
+        Get a Genre object by specifying its id. 
+        The response is Genre object with id and genre name.
+            """)
+    @ApiResponses({
+      @ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = GenreDTO.class), mediaType = "application/json") }),
+      @ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) }),
+      @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
     @GetMapping("/{id}")
     public ResponseEntity<GenreDTO> getGenreById(@PathVariable Long id) {
         try {
@@ -42,7 +59,16 @@ public class GenreController {
         }
     }
 
-
+    @Operation(
+      summary = "Create a Genre",
+      description = """
+        Create a Genre object. 
+        The response is Genre object with id and genre name.
+            """)
+    @ApiResponses({
+      @ApiResponse(responseCode = "201", content = { @Content(schema = @Schema(implementation = GenreDTO.class), mediaType = "application/json") }),
+      @ApiResponse(responseCode = "400", content = { @Content(schema = @Schema()) }),
+      @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
     @PostMapping
     public ResponseEntity<GenreDTO> createGenre(@RequestBody GenreDTO genreDTO) {
         try{
@@ -54,6 +80,16 @@ public class GenreController {
         }
     }
 
+    @Operation(
+      summary = "Update a Genre by Id",
+      description = """
+          Update a Genre object by specifying its id and the fields to modify. 
+          The response is Genre object with id and genre name.",
+              """)
+    @ApiResponses({
+      @ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = GenreDTO.class), mediaType = "application/json") }),
+      @ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) }),
+      @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
     @PutMapping("/{id}")
     public ResponseEntity<GenreDTO> updateGenre(@PathVariable Long id, @RequestBody GenreDTO genreDTO) {
         try {
@@ -65,6 +101,12 @@ public class GenreController {
         }
     }
 
+    @Operation(
+      summary = "Delete a Genre by Id",
+      description = "Delete a Genre object by specifying its id.")
+    @ApiResponses({
+      @ApiResponse(responseCode = "204", content = { @Content(schema = @Schema()) }),
+      @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteGenre(@PathVariable Long id) {
         try {

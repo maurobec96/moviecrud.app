@@ -14,8 +14,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
 
+@Tag(name = "Director", description = "Director management APIs")
 @RestController
 @RequestMapping("api/director")
 public class DirectorController {
@@ -26,11 +33,22 @@ public class DirectorController {
         this.directorService = directorService;
     }
 
+    
     @GetMapping
     public ResponseEntity<List<DirectorDTO>> getAllDirectors() {
         return new ResponseEntity<>(directorService.getAllDirectors(), HttpStatus.OK);
     }
 
+    @Operation(
+      summary = "Retrieve a Director by Id",
+      description = """
+          Get a Director object by specifying its id. 
+          The response is Director object with id, first name, and last name.
+              """)
+    @ApiResponses({
+      @ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = DirectorDTO.class), mediaType = "application/json") }),
+      @ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) }),
+      @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
     @GetMapping("/{id}")
     public ResponseEntity<DirectorDTO> getDirectorById(@PathVariable Long id) {
         try {
@@ -42,7 +60,16 @@ public class DirectorController {
         }
     }
 
-
+    @Operation(
+      summary = "Create a Director",
+      description = """
+          Create a Director object. 
+          The response is Director object with id, first name, and last name.
+              """)
+    @ApiResponses({
+      @ApiResponse(responseCode = "201", content = { @Content(schema = @Schema(implementation = DirectorDTO.class), mediaType = "application/json") }),
+      @ApiResponse(responseCode = "400", content = { @Content(schema = @Schema()) }),
+      @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
     @PostMapping
     public ResponseEntity<DirectorDTO> createDirector(@RequestBody DirectorDTO directorDTO) {
         try{
@@ -54,6 +81,16 @@ public class DirectorController {
         }
     }
 
+    @Operation(
+      summary = "Update a Director by Id",
+      description = """
+            Update a Director object by specifying its id and the fields to modify. 
+            The response is Director object with id, first name, and last name.
+              """)
+    @ApiResponses({
+      @ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = DirectorDTO.class), mediaType = "application/json") }),
+      @ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) }),
+      @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
     @PutMapping("/{id}")
     public ResponseEntity<DirectorDTO> updateDirector(@PathVariable Long id, @RequestBody DirectorDTO directorDTO) {
         try {
@@ -65,6 +102,12 @@ public class DirectorController {
         }
     }
 
+    @Operation(
+      summary = "Delete a Director by Id",
+      description = "Delete a Director object by specifying its id.")
+    @ApiResponses({
+      @ApiResponse(responseCode = "204", content = { @Content(schema = @Schema()) }),
+      @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteDirector(@PathVariable Long id) {
         try {
