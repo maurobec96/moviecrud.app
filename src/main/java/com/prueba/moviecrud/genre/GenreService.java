@@ -1,39 +1,47 @@
 package com.prueba.moviecrud.genre;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 @Service
 public class GenreService {
     
-    private GenreRepository GenreRepository;
+    private GenreRepository genreRepository;
+    private ModelMapper modelMapper;
 
-
-    public GenreService(GenreRepository GenreRepository) {
-        this.GenreRepository = GenreRepository;
+    public GenreService(GenreRepository genreRepository, ModelMapper modelMapper) {
+        this.genreRepository = genreRepository;
+        this.modelMapper = modelMapper;
     }
 
-    public List<Genre> getAllGenres(){
-        return GenreRepository.findAll();
+    public List<GenreDTO> getAllGenres(){
+        return genreRepository.findAll().stream()
+                .map(genre -> modelMapper.map(genre, GenreDTO.class))
+                .collect(Collectors.toList());
     }
 
-    public Genre createGenre(Genre Genre){
-        return GenreRepository.save(Genre);
+    public GenreDTO getGenreById(Long id){
+        return modelMapper.map(genreRepository.getReferenceById(id), GenreDTO.class);
     }
 
-    public Genre getGenreById(Long id){
-        return GenreRepository.getReferenceById(id);
+    public GenreDTO createGenre(GenreDTO genreDTO){
+        return modelMapper.map(genreRepository.save(modelMapper.map(genreDTO, Genre.class)),GenreDTO.class);
     }
 
-    public Genre updateGenre(Long id, Genre Genre){
-        Genre GenreToUpdate = getGenreById(id);
-        GenreToUpdate.setGenreName(Genre.getGenreName());
-        return GenreRepository.save(GenreToUpdate);
+
+    public GenreDTO updateGenre(Long id, GenreDTO genreDTO){
+        GenreDTO genreToUpdate = getGenreById(id);
+        genreToUpdate.setGenreName(genreDTO.getGenreName());
+        Genre genre = modelMapper.map(genreToUpdate, Genre.class);
+
+        return modelMapper.map(genreRepository.save(genre), GenreDTO.class);
     }
 
     public void deleteGenre(Long id){
-        GenreRepository.deleteById(id);
+        genreRepository.deleteById(id);
     }
     
 

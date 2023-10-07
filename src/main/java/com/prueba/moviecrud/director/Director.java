@@ -19,7 +19,7 @@ import jakarta.persistence.OneToMany;
 public class Director {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="ID_DIRECTOR")
     private Long id;
 

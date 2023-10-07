@@ -16,7 +16,7 @@ import jakarta.persistence.ManyToMany;
 public class Genre {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="ID_GENRE")
     private Long id;
 

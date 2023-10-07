@@ -1,26 +1,19 @@
 package com.prueba.moviecrud.director;
 
-// public record DirectorDTO(Long id, String firstName, String lastName) {
-//     public DirectorDTO{
-//         if(firstName.isBlank()) {
-//             throw new IllegalArgumentException("First name cannot be empty.");
-//         } 
-//         if(lastName.isBlank()) {
-//             throw new IllegalArgumentException("Last name cannot be empty.");
-//         }
-//     }
-// }
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class DirectorDTO{
 
-    private String id;
+    @JsonFormat(shape =  JsonFormat.Shape.STRING)
+    private Long id;
+
     private String firstName;
     private String lastName;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
     public String getFirstName() {

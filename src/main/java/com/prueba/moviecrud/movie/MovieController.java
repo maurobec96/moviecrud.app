@@ -1,4 +1,4 @@
-package com.prueba.moviecrud.genre;
+package com.prueba.moviecrud.movie;
 
 import java.util.List;
 
@@ -17,26 +17,27 @@ import org.springframework.web.server.ResponseStatusException;
 import jakarta.persistence.EntityNotFoundException;
 
 @RestController
-@RequestMapping("api/genre")
-public class GenreController {
-    
-    private GenreService genreService;
+@RequestMapping("api/movie")
+public class MovieController {
 
-    public GenreController(GenreService GenreService) {
-        this.genreService = GenreService;
+    private MovieService movieService;
+
+
+    public MovieController(MovieService movieService) {
+        this.movieService = movieService;
     }
 
     @GetMapping
-    public ResponseEntity<List<GenreDTO>> getAllGenres() {
-        return new ResponseEntity<>(genreService.getAllGenres(), HttpStatus.OK);
+    public ResponseEntity<List<MovieDTO>> getAllMovies() {
+        return new ResponseEntity<>(movieService.getAllMovies(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<GenreDTO> getGenreById(@PathVariable Long id) {
+    public ResponseEntity<MovieDTO> getMovieById(@PathVariable Long id) {
         try {
-            return new ResponseEntity<>(genreService.getGenreById(id), HttpStatus.OK);
+            return new ResponseEntity<>(movieService.getMovieById(id), HttpStatus.OK);
         } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Genre not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Movie not found");
         } catch (Exception e2){
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e2.getMessage());
         }
@@ -44,9 +45,9 @@ public class GenreController {
 
 
     @PostMapping
-    public ResponseEntity<GenreDTO> createGenre(@RequestBody GenreDTO genreDTO) {
+    public ResponseEntity<MovieDTO> createMovie(@RequestBody MovieDTO movieDTO) {
         try{
-        return new ResponseEntity<>(genreService.createGenre(genreDTO), HttpStatus.CREATED);
+        return new ResponseEntity<>(movieService.createMovie(movieDTO), HttpStatus.CREATED);
         } catch (IllegalArgumentException  e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Property not Valid");
         } catch (Exception e2){
@@ -54,28 +55,25 @@ public class GenreController {
         }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<GenreDTO> updateGenre(@PathVariable Long id, @RequestBody GenreDTO genreDTO) {
-        try {
-            return new ResponseEntity<>(genreService.updateGenre(id, genreDTO), HttpStatus.OK);
-        } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Genre not found");
+    @PutMapping
+    public ResponseEntity<MovieDTO> createMovie(@PathVariable Long id, @RequestBody MovieDTO movieDTO) {
+        try{
+        return new ResponseEntity<>(movieService.updateMovie(id, movieDTO), HttpStatus.ACCEPTED);
+        } catch (IllegalArgumentException  e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Movie not found");
         } catch (Exception e2){
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e2.getMessage());
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteGenre(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteDirector(@PathVariable Long id) {
         try {
-            genreService.deleteGenre(id);
+            movieService.deleteMovie(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
     
-
-
-
 }

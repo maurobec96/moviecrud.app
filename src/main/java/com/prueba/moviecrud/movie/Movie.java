@@ -45,9 +45,8 @@ public class Movie {
     )
     private Set<Genre> genres;
 
-
     public Long getId() {
-        return this.id;
+        return id;
     }
 
     public void setId(Long id) {
@@ -55,7 +54,7 @@ public class Movie {
     }
 
     public String getTitle() {
-        return this.title;
+        return title;
     }
 
     public void setTitle(String title) {
@@ -63,7 +62,7 @@ public class Movie {
     }
 
     public Integer getReleaseYear() {
-        return this.releaseYear;
+        return releaseYear;
     }
 
     public void setReleaseYear(Integer releaseYear) {
@@ -71,11 +70,19 @@ public class Movie {
     }
 
     public String getDescription() {
-        return this.description;
+        return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Director getDirector() {
+        return director;
+    }
+
+    public void setDirector(Director director) {
+        this.director = director;
     }
 
     public Set<Genre> getGenres() {
@@ -85,5 +92,10 @@ public class Movie {
     public void setGenres(Set<Genre> genres) {
         this.genres = genres;
     }
+
+
+    
+
+
     
 }

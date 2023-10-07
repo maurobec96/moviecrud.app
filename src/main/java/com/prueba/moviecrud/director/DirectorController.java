@@ -1,9 +1,7 @@
 package com.prueba.moviecrud.director;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,30 +21,20 @@ import jakarta.persistence.EntityNotFoundException;
 public class DirectorController {
     
     private DirectorService directorService;
-    private ModelMapper modelMapper;
 
-
-    public DirectorController(DirectorService directorService, ModelMapper modelMapper) {
+    public DirectorController(DirectorService directorService) {
         this.directorService = directorService;
-        this.modelMapper = modelMapper;
     }
 
     @GetMapping
     public ResponseEntity<List<DirectorDTO>> getAllDirectors() {
-        List<Director> directors = directorService.getAllDirectors();
-        List<DirectorDTO> directorDTOs = directors.stream()
-                .map(director -> modelMapper.map(director, DirectorDTO.class))
-                .collect(Collectors.toList());
-        return new ResponseEntity<>(directorDTOs, HttpStatus.OK);
+        return new ResponseEntity<>(directorService.getAllDirectors(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<DirectorDTO> getDirectorById(@PathVariable Long id) {
         try {
-            Director director = directorService.getDirectorById(id);
-            DirectorDTO directorDTO = modelMapper.map(director, DirectorDTO.class);
-            return new ResponseEntity<>(directorDTO, HttpStatus.OK);
-            
+            return new ResponseEntity<>(directorService.getDirectorById(id), HttpStatus.OK);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Director not found");
         } catch (Exception e2){
@@ -58,10 +46,7 @@ public class DirectorController {
     @PostMapping
     public ResponseEntity<DirectorDTO> createDirector(@RequestBody DirectorDTO directorDTO) {
         try{
-        Director director = modelMapper.map(directorDTO, Director.class);
-        Director createdDirector = directorService.createDirector(director);
-        DirectorDTO createdDirectorDTO = modelMapper.map(createdDirector, DirectorDTO.class);
-        return new ResponseEntity<>(createdDirectorDTO, HttpStatus.CREATED);
+        return new ResponseEntity<>(directorService.createDirector(directorDTO), HttpStatus.CREATED);
         } catch (IllegalArgumentException  e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Property not Valid");
         } catch (Exception e2){
@@ -72,10 +57,7 @@ public class DirectorController {
     @PutMapping("/{id}")
     public ResponseEntity<DirectorDTO> updateDirector(@PathVariable Long id, @RequestBody DirectorDTO directorDTO) {
         try {
-        Director director = modelMapper.map(directorDTO, Director.class);
-        Director updatedDirector = directorService.updateDirector(id, director);
-            DirectorDTO updatedDirectorDTO = modelMapper.map(updatedDirector, DirectorDTO.class);
-            return new ResponseEntity<>(updatedDirectorDTO, HttpStatus.OK);
+            return new ResponseEntity<>(directorService.updateDirector(id, directorDTO), HttpStatus.OK);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Director not found");
         } catch (Exception e2){
