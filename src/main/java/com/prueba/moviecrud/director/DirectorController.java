@@ -33,7 +33,15 @@ public class DirectorController {
         this.directorService = directorService;
     }
 
-    
+    @Operation(
+      summary = "Retrieve all Directors",
+      description = """
+          Get a all Director objects. 
+          The response is a list of Director objects with id, first name, and last name.
+              """)
+    @ApiResponses({
+      @ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = DirectorDTO.class), mediaType = "application/json") })
+    })
     @GetMapping
     public ResponseEntity<List<DirectorDTO>> getAllDirectors() {
         return new ResponseEntity<>(directorService.getAllDirectors(), HttpStatus.OK);

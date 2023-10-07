@@ -33,6 +33,15 @@ public class GenreController {
         this.genreService = GenreService;
     }
 
+    @Operation(
+      summary = "Retrieve all Genres",
+      description = """
+          Get a all Genre objects. 
+          The response is a list of Genre objects with id and genre name.
+              """)
+    @ApiResponses({
+      @ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = GenreDTO.class), mediaType = "application/json") })
+    })
     @GetMapping
     public ResponseEntity<List<GenreDTO>> getAllGenres() {
         return new ResponseEntity<>(genreService.getAllGenres(), HttpStatus.OK);
