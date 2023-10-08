@@ -107,7 +107,7 @@ public class MovieController {
     public ResponseEntity<MovieDTO> createMovie(@PathVariable Long id, @RequestBody MovieDTO movieDTO) {
         try{
         return new ResponseEntity<>(movieService.updateMovie(id, movieDTO), HttpStatus.ACCEPTED);
-        } catch (IllegalArgumentException  e) {
+        } catch (EntityNotFoundException  e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Movie not found");
         } catch (Exception e2){
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e2.getMessage());
@@ -119,12 +119,15 @@ public class MovieController {
       description = "Delete a Movie object by specifying its id.")
     @ApiResponses({
       @ApiResponse(responseCode = "204", content = { @Content(schema = @Schema()) }),
+      @ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) }),
       @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteDirector(@PathVariable Long id) {
         try {
             movieService.deleteMovie(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }  catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Movie not found");
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }

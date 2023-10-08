@@ -29,7 +29,7 @@ public class Director {
     @Column(name = "LAST_NAME", length = 255, nullable = false, unique = true)
     private String lastName;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "director")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "director")
     @JsonIgnore
     private Set<Movie> movies;
 

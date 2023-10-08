@@ -1,6 +1,7 @@
 package com.prueba.moviecrud.movie;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -8,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.prueba.moviecrud.director.DirectorRepository;
 import com.prueba.moviecrud.genre.GenreRepository;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class MovieService {
@@ -35,8 +38,9 @@ public class MovieService {
             .collect(Collectors.toList());
     }
 
-    public MovieDTO getMovieById(Long id){
-        return modelMapper.map(movieRepository.getReferenceById(id), MovieDTO.class);
+    public MovieDTO getMovieById(Long id) throws EntityNotFoundException{
+        Movie movie = movieRepository.getReferenceById(id);
+        return mapToDTO(movie);
     }
 
     public MovieDTO createMovie(MovieDTO movieDTO){
@@ -47,7 +51,7 @@ public class MovieService {
     public MovieDTO updateMovie(Long id, MovieDTO movieDTO){
         Movie movie = movieRepository.getReferenceById(id);
         setMovieValues(movieDTO, movie);
-        return mapToDTO(movie);
+        return mapToDTO(movieRepository.save(movie));
     }
     
     public void deleteMovie(Long id){
