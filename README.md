@@ -29,7 +29,7 @@ Set up your development environment, if necessary.
 
 ## API Documentation
 The API in this project is documented using Swagger. Once the application is up you can access the Swagger UI to explore and test the API at the following URL:
-[http://localhost:8080/swagger-ui/index.html]
+[http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
 
 
 ## Database
