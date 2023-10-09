@@ -1,13 +1,14 @@
 package com.prueba.moviecrud.movie;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import com.prueba.moviecrud.director.DirectorDTO;
 import com.prueba.moviecrud.director.DirectorRepository;
+import com.prueba.moviecrud.genre.GenreDTO;
 import com.prueba.moviecrud.genre.GenreRepository;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -44,13 +45,15 @@ public class MovieService {
     }
 
     public MovieDTO createMovie(MovieDTO movieDTO){
-        Movie movie = getMovieFromDTO(movieDTO);
-        return mapToDTO(movie);
+        // Movie movie = getMovieFromDTO(movieDTO);
+        Movie movie = new Movie();
+        mapFromDTO(movieDTO, movie);
+        return mapToDTO(movieRepository.save(movie));
     }
 
     public MovieDTO updateMovie(Long id, MovieDTO movieDTO){
         Movie movie = movieRepository.getReferenceById(id);
-        setMovieValues(movieDTO, movie);
+        mapFromDTO(movieDTO, movie);
         return mapToDTO(movieRepository.save(movie));
     }
     
@@ -60,23 +63,24 @@ public class MovieService {
         movieRepository.delete(movie);
     }
     
-    private Movie getMovieFromDTO(MovieDTO movieDTO) {
-        Movie movie = new Movie();
-        setMovieValues(movieDTO, movie);
-        return movie;
-    }
-    
     private MovieDTO mapToDTO(Movie movie) {
-        return modelMapper.map(movieRepository.save(movie), MovieDTO.class);
+        MovieDTO movieDTO = new MovieDTO();
+        movieDTO.setId(movie.getId());
+        movieDTO.setDescription(movie.getDescription());
+        movieDTO.setReleaseYear(movie.getReleaseYear());
+        movieDTO.setDirector(modelMapper.map(movie.getDirector(), DirectorDTO.class));
+        movieDTO.setGenres(movie.getGenres().stream().map(genre -> modelMapper.map(genre, GenreDTO.class)).collect(Collectors.toList()));
+        return movieDTO;
     }
 
-    private void setMovieValues(MovieDTO movieDTO, Movie movie) {
+    private void mapFromDTO(MovieDTO movieDTO, Movie movie) {
         movie.setTitle(movieDTO.getTitle());
         movie.setDescription(movieDTO.getDescription());
         movie.setReleaseYear(movieDTO.getReleaseYear());
         movie.setDirector(directorRepository.getReferenceById(movieDTO.getDirector().getId()));
         movie.setGenres(movieDTO.getGenres().stream().map(GenreDTO -> genreRepository.getReferenceById(GenreDTO.getId())).collect(Collectors.toSet()));
     }
+
 
 
 

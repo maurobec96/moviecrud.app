@@ -25,11 +25,11 @@ public class DirectorService {
     }
     
     public DirectorDTO getDirectorById(Long id){
-        return modelMapper.map(directorRepository.getReferenceById(id), DirectorDTO.class);
+        return mapToDTO(directorRepository.getReferenceById(id));
     }
 
     public DirectorDTO createDirector(DirectorDTO directorDTO){
-        return modelMapper.map(directorRepository.save(modelMapper.map(directorDTO, Director.class)), DirectorDTO.class);
+        return mapToDTO(directorRepository.save(modelMapper.map(directorDTO, Director.class)));
     }
 
 
@@ -39,11 +39,19 @@ public class DirectorService {
         directorDTOToUpdate.setLastName(directorDTO.getLastName());
         Director director = modelMapper.map(directorDTOToUpdate, Director.class);
 
-        return modelMapper.map(directorRepository.save(director), DirectorDTO.class);
+        return mapToDTO(directorRepository.save(director));
     }
 
     public void deleteDirector(Long id){
         directorRepository.deleteById(id);
+    }
+
+    private DirectorDTO mapToDTO(Director director){
+        DirectorDTO directorDTO = new DirectorDTO();
+        directorDTO.setId(director.getId());
+        directorDTO.setFirstName(director.getFirstName());
+        directorDTO.setLastName(director.getLastName());
+        return directorDTO;
     }
     
 

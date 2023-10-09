@@ -20,7 +20,7 @@ public class Genre {
     @Column(name="ID_GENRE")
     private Long id;
 
-    @Column(name = "GENRE_NAME", length = 25, nullable = false)
+    @Column(name = "GENRE_NAME", length = 25, nullable = false, unique = true)
     private String genreName; 
 
     @ManyToMany(mappedBy = "genres")

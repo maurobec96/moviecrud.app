@@ -24,11 +24,11 @@ public class GenreService {
     }
 
     public GenreDTO getGenreById(Long id){
-        return modelMapper.map(genreRepository.getReferenceById(id), GenreDTO.class);
+        return mapToDTO(genreRepository.getReferenceById(id));
     }
 
     public GenreDTO createGenre(GenreDTO genreDTO){
-        return modelMapper.map(genreRepository.save(modelMapper.map(genreDTO, Genre.class)),GenreDTO.class);
+        return mapToDTO(genreRepository.save(modelMapper.map(genreDTO, Genre.class)));
     }
 
 
@@ -36,12 +36,18 @@ public class GenreService {
         GenreDTO genreToUpdate = getGenreById(id);
         genreToUpdate.setGenreName(genreDTO.getGenreName());
         Genre genre = modelMapper.map(genreToUpdate, Genre.class);
-
-        return modelMapper.map(genreRepository.save(genre), GenreDTO.class);
+        return mapToDTO(genreRepository.save(genre));
     }
 
     public void deleteGenre(Long id){
         genreRepository.deleteById(id);
+    }
+
+    private GenreDTO mapToDTO(Genre genre){
+        GenreDTO genreDTO = new GenreDTO();
+        genreDTO.setId(genre.getId());
+        genreDTO.setGenreName(genre.getGenreName());
+        return genreDTO;
     }
     
 

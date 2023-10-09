@@ -24,7 +24,7 @@ public class Movie {
     @Column(name="ID_MOVIE")
     private Long id;
 
-    @Column(name="TITLE", length = 100, nullable = false)
+    @Column(name="TITLE", length = 100, nullable = false, unique = true)
     private String title;
     
     @Column(name="RELEASE_YEAR", length=4, nullable=false)
