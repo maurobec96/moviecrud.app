@@ -24,7 +24,6 @@ Set up your development environment, if necessary.
 
 ## Install project dependencies:
 
-    ```sh
     mvn clean install
 
 ## API Documentation
@@ -43,7 +42,6 @@ The project can be configured using the application.properties file.
 ## Build and Run
 To build and run the project, use the following commands:
 
-    ```sh
     mvn spring-boot:run
 
 
